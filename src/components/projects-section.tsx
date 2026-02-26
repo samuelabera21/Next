@@ -1,24 +1,17 @@
 "use client";
 
 import { ExternalLink, Github } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 import { content, projects } from "@/lib/content";
 import { useLanguage } from "./providers";
 
-function getPreviewSrc(liveUrl: string, fallbackImage: string) {
-  if (!liveUrl || liveUrl.includes("github.com")) {
-    return fallbackImage;
-  }
-
-  return `https://image.thum.io/get/width/1200/noanimate/${liveUrl}`;
+function canEmbedLivePreview(liveUrl: string) {
+  return Boolean(liveUrl) && !liveUrl.includes("github.com");
 }
 
 export function ProjectsSection({ showAll = true }: { showAll?: boolean }) {
   const { locale } = useLanguage();
   const visibleProjects = showAll ? projects : projects.slice(0, 4);
-  const [imageMode, setImageMode] = useState<Record<string, 0 | 1 | 2>>({});
 
   return (
     <section id="projects" className="scroll-mt-24 py-16">
@@ -37,29 +30,18 @@ export function ProjectsSection({ showAll = true }: { showAll?: boolean }) {
             className="overflow-hidden rounded-2xl border border-border bg-card ai-hover glass-panel"
           >
             <div className="relative h-44 w-full">
-              {imageMode[project.title] === 2 ? (
+              {canEmbedLivePreview(project.live) ? (
+                <iframe
+                  src={project.live}
+                  title={`${project.title} live preview`}
+                  className="h-full w-full border-0"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              ) : (
                 <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-accent to-background px-4 text-center text-sm font-semibold text-muted-foreground">
                   {project.title}
                 </div>
-              ) : (
-                <Image
-                  src={
-                    imageMode[project.title] === 1
-                      ? project.image
-                      : getPreviewSrc(project.live, project.image)
-                  }
-                  alt={`${project.title} screenshot`}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  unoptimized
-                  onError={() => {
-                    setImageMode((previous) => ({
-                      ...previous,
-                      [project.title]: previous[project.title] === 1 ? 2 : 1,
-                    }));
-                  }}
-                />
               )}
             </div>
             <div className="p-5">
