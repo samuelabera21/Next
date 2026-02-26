@@ -1,36 +1,129 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Samuel Abera Mekonn Portfolio
 
-## Getting Started
+A modern, responsive, bilingual (English + Amharic) portfolio built with Next.js, Tailwind CSS, and Supabase.
 
-First, run the development server:
+## Stack
+
+- Frontend: Next.js (App Router) + React + Tailwind CSS
+- Backend: Next.js API Routes
+- Database: PostgreSQL (Supabase)
+- Deployment: Vercel
+
+## Features
+
+- Clean, modern, minimal UI
+- Dark / Light mode toggle
+- Language toggle (English / Amharic)
+- Responsive design (mobile + desktop)
+- Full portfolio sections (Hero, About, Skills, Projects, Blog, Contact, Footer)
+- Blog routes with dynamic slug pages
+- Contact form saving to Supabase
+- Blog CRUD API for Supabase-backed posts
+- SEO metadata, sitemap, robots
+
+## Routes
+
+- `/` Home
+- `/projects` Projects
+- `/blog` Blog list
+- `/blog/[slug]` Blog post detail
+- `/contact` Contact page
+
+## API Endpoints
+
+- `POST /api/contact` Save contact message
+- `GET /api/contacts` List saved contact messages (admin use)
+- `GET /api/blog` List blog posts
+- `POST /api/blog` Create blog post
+- `PUT /api/blog/:id` Update blog post
+- `DELETE /api/blog/:id` Delete blog post
+- `GET /api/blog/slug/:slug` Get blog post by slug
+
+## Project Structure
+
+```text
+src/
+	app/
+		api/
+		blog/
+		contact/
+		projects/
+		layout.tsx
+		page.tsx
+		robots.ts
+		sitemap.ts
+	components/
+	lib/
+public/
+supabase/
+	schema.sql
+```
+
+## Local Setup
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Configure environment variables:
+
+```bash
+cp .env.example .env.local
+```
+
+Fill these values in `.env.local`:
+
+```env
+SUPABASE_URL=https://your-project-id.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+```
+
+3. Create tables in Supabase SQL Editor by running:
+
+```sql
+-- File: supabase/schema.sql
+```
+
+4. Run dev server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Open `http://localhost:3000`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Supabase Schema
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Use the SQL in `supabase/schema.sql`.
 
-## Learn More
+- `contacts`
+	- `id` uuid
+	- `name` text
+	- `email` text
+	- `message` text
+	- `created_at` timestamp
 
-To learn more about Next.js, take a look at the following resources:
+- `blog_posts`
+	- `id` uuid
+	- `title` text
+	- `slug` text (unique)
+	- `content` text
+	- `created_at` timestamp
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deployment (Vercel + Supabase)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Push this project to GitHub.
+2. Import repository into Vercel.
+3. In Vercel Project Settings → Environment Variables, add:
+	 - `SUPABASE_URL`
+	 - `SUPABASE_SERVICE_ROLE_KEY`
+4. Deploy.
+5. Ensure tables are created in Supabase using `supabase/schema.sql`.
 
-## Deploy on Vercel
+## Notes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Replace `public/resume.pdf` with your final resume file.
+- Update social/profile links in footer if needed.
+- If Supabase variables are not configured, blog and contact APIs fall back to safe demo behavior.
