@@ -8,7 +8,7 @@ A modern, responsive, bilingual (English + Amharic) portfolio built with Next.js
 - Backend: Next.js API Routes
 - Database: PostgreSQL (Supabase)
 - Deployment: Vercel
-samuel abe
+samuel ab
 ## Features
 
 - Clean, modern, minimal UI
